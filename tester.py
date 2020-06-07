@@ -87,7 +87,7 @@ predict = model.predict_generator(test_generator,steps = nb_samples)
 rows = predict.shape[0]
 probs_list = []
 for idx in range(rows):
-    probs_list.append(predict[idx,0])
+    probs_list.append(predict[idx,1])
 
 with open('submission.csv', 'w', newline='') as myfile:
      wr = csv.writer(myfile, quoting=csv.QUOTE_NONE)
