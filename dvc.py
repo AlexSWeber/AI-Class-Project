@@ -13,22 +13,20 @@ import numpy as np
 import pandas as pd 
 import zipfile
 from keras.preprocessing.image import ImageDataGenerator, load_img
-from keras.utils import to_categorical
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import random
-from subprocess import check_output
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D, Dropout, Flatten, Dense, Activation, BatchNormalization
+from keras.layers import Conv2D, MaxPooling2D, Dropout, Flatten, Dense, BatchNormalization
 import os
-print(check_output(["ls", "../input/"]).decode("utf8"))
+#print(check_output(["ls", "../input/"]).decode("utf8"))
 
 # %% [markdown]
 # # Extract all train images
 
 # %% [code]
-with zipfile.ZipFile('../input/train.zip', 'r') as z:    
+with zipfile.ZipFile('C:/Users/Alex/Documents/School/AI/train.zip', 'r') as z:    
     z.extractall(".") 
 #print(check_output(["ls", "train"]).decode("utf8"))
    
@@ -58,7 +56,9 @@ df.head(10) ##spot check
 # # Define constant for CNN & data augmentation generator
 
 # %% [code]
-FAST_RUN       = False
+FAST_RUN       = True
+#FAST_RUN_EPOCHS=3
+FAST_RUN_EPOCHS=2
 IMAGE_WIDTH    =128
 IMAGE_HEIGHT   =128
 IMAGE_SIZE     =(IMAGE_WIDTH, IMAGE_HEIGHT)
@@ -249,7 +249,7 @@ plt.show()
 # # Fit Model
 
 # %% [code]
-epochs=3 if FAST_RUN else 16
+epochs=FAST_RUN_EPOCHS if FAST_RUN else 16
 history = model.fit_generator(
     train_generator, 
     epochs=epochs,
@@ -275,8 +275,8 @@ ax1.plot(history.history['val_loss'], color='r', label="validation loss")
 ax1.set_xticks(np.arange(1, epochs, 1))
 ax1.set_yticks(np.arange(0, 1, 0.1))
 
-ax2.plot(history.history['acc'], color='b', label="Training accuracy")
-ax2.plot(history.history['val_acc'], color='r',label="Validation accuracy")
+ax2.plot(history.history['accuracy'], color='b', label="Training accuracy")
+ax2.plot(history.history['val_accuracy'], color='r',label="Validation accuracy")
 ax2.set_xticks(np.arange(1, epochs, 1))
 
 legend = plt.legend(loc='best', shadow=True)
